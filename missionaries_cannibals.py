@@ -19,25 +19,9 @@ class node:
 	def __init__(self, value):
 		self.value = value
 		self.children = []
-		self.actions = ACTIONS
-		#self.create_children()
 
 	def get_value(self):
 		return self.value
-
-	def get_children(self):
-		return self.children
-
-	def create_children(self):
-		# Creates child nodes with 5 posssible actions
-		for action in self.actions:
-			if self.value[NUM_BOAT] == WRONGSIDE:
-				child_value = map(operator.sub, self.value, action)
-				self.children.append(node(child_value))
-			else:
-				child_value = map(operator.add, self.value, action)
-				self.children.append(node(child_value))
-		self.valid_children(self.children) # ensures only valid children remain
 
 	def valid(self, value):
 		# num_cannibals > num_missionaries are invalid states and are removed from consideration
@@ -62,14 +46,15 @@ def breadth_first_search(current_state):
 			child = None
 			if state.value[NUM_BOAT] == WRONGSIDE:
 				child = node(map(operator.sub, state.value, action))
-			if state.value[NUM_BOAT] != WRONGSIDE:
+			elif state.value[NUM_BOAT] != WRONGSIDE:
 				child = node(map(operator.add, state.value, action))
 			if state.valid(child.get_value()) and child not in explored and child != state:
 				if child.get_value() == GOAL:
-					print "GOALLL"
+					print_line(child.get_value(), [0,0,0], q.qsize())
 					return child
-				q.put(child)
-				print_line(child.get_value(), action, q.qsize())
+				else:
+					q.put(child)
+					print_line(child.get_value(), action, q.qsize())
 
 #	return current_state, action, nodes_expanded
 
@@ -78,7 +63,6 @@ def print_line(value, action, nodes_expanded):
 
 if __name__ == '__main__':
 	initial_state = [3,3,1]
-	current_state = initial_state
 
 	print "Algorithm: breadth-first search"
 	init = node(initial_state)
