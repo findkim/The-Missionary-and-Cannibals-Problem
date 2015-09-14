@@ -16,12 +16,15 @@ ACTIONS = [[1,0,1],[2,0,1],[0,1,1],[0,2,1],[1,1,1]]
 GOAL = [0,0,0]
 
 class node:
-	def __init__(self, value):
+	def __init__(self, value, action):
 		self.value = value
-		self.children = []
+		self.action = action
 
 	def get_value(self):
 		return self.value
+
+	def get_action(self):
+		return self.action
 
 	def valid(self, value):
 		# num_cannibals > num_missionaries are invalid states and are removed from consideration
@@ -42,20 +45,24 @@ def breadth_first_search(current_state):
 	while not q.empty():
 		state = q.get()
 		explored.add(state)
-		for action in ACTIONS:
+		if state.valid(state.get_value()) and child not in explored and child != state:
+			for action in ACTIONS:
 			child = None
-			if state.value[NUM_BOAT] == WRONGSIDE:
-				child = node(map(operator.sub, state.value, action))
-			elif state.value[NUM_BOAT] != WRONGSIDE:
-				child = node(map(operator.add, state.value, action))
-			if state.valid(child.get_value()) and child not in explored and child != state:
-				if child.get_value() == GOAL:
-					print_line(child.get_value(), [0,0,0], q.qsize())
-					return child
-				else:
-					q.put(child)
-					print_line(child.get_value(), action, q.qsize())
+					if state.value[NUM_BOAT] == WRONGSIDE:
+					child = node(map(operator.sub, state.value, action), action)
+				elif state.value[NUM_BOAT] != WRONGSIDE:
+					child = node(map(operator.add, state.value, action), action)
+				q.put(child)
 
+		print_line(state.get_value(), state.get_action(), q.qsize())
+		'''
+			if child.get_value() == GOAL:
+				print_line(child.get_value(), [0,0,0], q.qsize())
+				return child
+			else:
+				q.put(child)
+				print_line(child.get_value(), action, q.qsize())
+		'''
 #	return current_state, action, nodes_expanded
 
 def print_line(value, action, nodes_expanded):
