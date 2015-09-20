@@ -5,7 +5,7 @@
 # Sept. 13, 2015
 # S. M. Niaz Arifin
 
-# Program solves the Missionaries and Cannibals problem using uniform breadth-first search
+# Program solves the Missionaries and Cannibals problem using breadth-first search
 
 import operator
 import Queue
