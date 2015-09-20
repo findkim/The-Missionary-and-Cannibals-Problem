@@ -41,14 +41,14 @@ def breadth_first_search(current_state):
 	explored = set()
 	while not q.empty():
 		state = q.get()
-		explored.add(state)
+		#explored.add(state)
 		for action in ACTIONS:
 			child = None
 			if state.value[NUM_BOAT] == WRONGSIDE:
 				child = node(map(operator.sub, state.value, action))
 			elif state.value[NUM_BOAT] != WRONGSIDE:
 				child = node(map(operator.add, state.value, action))
-			if state.valid(child.get_value()) and child not in explored and child != state:
+			if state.valid(child.get_value()) and child != state:#child not in explored:
 				if child.get_value() == GOAL:
 					print_line(child.get_value(), [0,0,0], q.qsize())
 					return child
